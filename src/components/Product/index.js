@@ -1,7 +1,6 @@
 import { AddShoppingCartSharp } from '@material-ui/icons';
 import React from 'react';
 import {
-	Box,
 	Button,
 	ButtonBase,
 	Grid,
@@ -12,7 +11,7 @@ import {
 
 const Product = (props) => {
 	const classes = useStyles();
-	const { name, shortDesc, price, img } = props.product;
+	const { name, price, img } = props.product;
 
 	return (
 		<div className={classes.root}>

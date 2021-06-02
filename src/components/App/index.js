@@ -3,6 +3,8 @@ import NavBar from '../NavBar';
 import './App.css';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ProductList from '../ProductList';
+import SearchControl from '../SearchControl';
+import { Grid } from '@material-ui/core';
 
 const theme = responsiveFontSizes(
 	createMuiTheme({
@@ -12,7 +14,7 @@ const theme = responsiveFontSizes(
 			},
 			secondary: {
 				main: '#ffffff',
-			}
+			},
 		},
 	})
 );
@@ -20,42 +22,50 @@ const theme = responsiveFontSizes(
 const products = [
 	{
 		name: 'Browline Glasses 195421',
-		shortDesc: 'This retro browline style looks as fresh today as it did when it first arrived on the scene more than 50 years ago.',
+		shortDesc:
+			'This retro browline style looks as fresh today as it did when it first arrived on the scene more than 50 years ago.',
 		price: 15.95,
-		img: 'https://static.zennioptical.com/production/products/general/19/54/195421-eyeglasses-front-view.jpg?resize=800px:*&output-quality=80'
+		img: 'https://static.zennioptical.com/production/products/general/19/54/195421-eyeglasses-front-view.jpg?resize=800px:*&output-quality=80',
 	},
 	{
 		name: 'Round Clip-On Set 6499925',
-		shortDesc: 'These chic and modern frames have a downtown vibe that will appeal to both men and women.',
+		shortDesc:
+			'These chic and modern frames have a downtown vibe that will appeal to both men and women.',
 		price: 23.95,
-		img: 'https://static.zennioptical.com/production/products/general/64/99/6499925-clipon-front-view.jpg?resize=800px:*&output-quality=80'
+		img: 'https://static.zennioptical.com/production/products/general/64/99/6499925-clipon-front-view.jpg?resize=800px:*&output-quality=80',
 	},
 	{
 		name: 'Round Glasses 3213214',
-		shortDesc: 'These round glasses have larger lenses that work well as sunglasses or bold everyday glasses.',
+		shortDesc:
+			'These round glasses have larger lenses that work well as sunglasses or bold everyday glasses.',
 		price: 19.95,
-		img: 'https://static.zennioptical.com/production/products/general/32/13/3213214-eyeglasses-front-view.jpg?resize=800px:*&output-quality=80'
+		img: 'https://static.zennioptical.com/production/products/general/32/13/3213214-eyeglasses-front-view.jpg?resize=800px:*&output-quality=80',
 	},
 	{
 		name: 'Magnetic Snap-On Set 6498921',
-		shortDesc: 'Our magnetic snap-on sunshade sets come with prescription glasses and a polarized sunshade that snaps on securely to the front rim with hidden magnets for seamless sunglasses.',
+		shortDesc:
+			'Our magnetic snap-on sunshade sets come with prescription glasses and a polarized sunshade that snaps on securely to the front rim with hidden magnets for seamless sunglasses.',
 		price: 35.95,
-		img: 'https://static.zennioptical.com/production/products/general/64/98/6498921-clipon-front-view.jpg?resize=800px:*&output-quality=80'
+		img: 'https://static.zennioptical.com/production/products/general/64/98/6498921-clipon-front-view.jpg?resize=800px:*&output-quality=80',
 	},
 	{
 		name: 'Round Glasses 7809225',
-		shortDesc: 'This line of vintage-inspired eyewear merges classic styles with contemporary colors and details.',
+		shortDesc:
+			'This line of vintage-inspired eyewear merges classic styles with contemporary colors and details.',
 		price: 19.95,
-		img: 'https://static.zennioptical.com/production/products/general/78/09/7809225-eyeglasses-front-view.jpg?resize=800px:*&output-quality=80'
-	}
-]
+		img: 'https://static.zennioptical.com/production/products/general/78/09/7809225-eyeglasses-front-view.jpg?resize=800px:*&output-quality=80',
+	},
+];
 
 function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<div className='App'>
 				<NavBar />
-				<ProductList list={products} />
+				<Grid item>
+					<SearchControl />
+					<ProductList list={products} />
+				</Grid>
 			</div>
 		</ThemeProvider>
 	);
