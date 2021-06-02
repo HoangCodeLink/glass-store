@@ -34,7 +34,6 @@ const NavBar = (props) => {
 					color='inherit'
 					variant='outlined'
 					aria-label='New Product'
-					className={classes.button}
 					aria-controls='NewProduct'
 					title='New Product'
 					size='medium'
