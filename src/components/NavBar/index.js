@@ -2,6 +2,9 @@ import {
 	AppBar,
 	Badge,
 	Button,
+	Dialog,
+	DialogContent,
+	DialogTitle,
 	IconButton,
 	makeStyles,
 	Toolbar,
@@ -9,11 +12,14 @@ import {
 } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
-import React from 'react';
-import { Add } from '@material-ui/icons';
+import React, { useState } from 'react';
+import { Add, Cancel } from '@material-ui/icons';
+import AddProduct from '../AddProduct';
 
 const NavBar = (props) => {
 	const classes = useStyles();
+
+	const [open, setOpen] = useState(false);
 
 	return (
 		<AppBar position='static'>
@@ -37,9 +43,32 @@ const NavBar = (props) => {
 					aria-controls='NewProduct'
 					title='New Product'
 					size='medium'
+					onClick={() => setOpen(true)}
 					startIcon={<Add />}>
 					<span className={classes.buttonText}>New Product</span>
 				</Button>
+				<Dialog
+					fullWidth
+					maxWidth='md'
+					open={open}
+					onClose={() => setOpen(false)}
+					aria-labelledby='form-dialog-title'
+					disableBackdropClick
+					disableEscapeKeyDown>
+					<DialogTitle>
+						<Button
+							variant='outlined'
+							size='large'
+							onClick={() => setOpen(false)}
+							className={classes.button}
+							startIcon={<Cancel />}>
+							Cancel
+						</Button>
+					</DialogTitle>
+					<DialogContent>
+						<AddProduct />
+					</DialogContent>
+				</Dialog>
 				<IconButton aria-label='show 4 new mails' color='inherit'>
 					<Badge badgeContent={4} color='secondary'>
 						<ShoppingCartIcon />
@@ -64,9 +93,16 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	img: {
-		width: 90,
-		height: 90,
+		width: 70,
+		height: 70,
 	},
+	button: {
+		float: 'right',
+		'&:hover': {
+			backgroundColor: 'red',
+			color: 'white'
+		},
+	}
 }));
 
 export default NavBar;

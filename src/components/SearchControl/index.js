@@ -1,7 +1,6 @@
 import {
 	Button,
 	Card,
-	CardActions,
 	CardContent,
 	makeStyles,
 	TextField,
@@ -19,6 +18,7 @@ const SearchControl = (props) => {
 							className={`${classes.input} ${classes.name}`}
 							id='search-name'
                             name='name'
+							size='small'
 							label='Name of product'
 							variant='outlined'
 						/>
@@ -26,6 +26,7 @@ const SearchControl = (props) => {
 							className={classes.input}
 							id='search-from-price'
                             name='fromPrice'
+							size='small'
 							label='From Price'
 							variant='outlined'
 						/>
@@ -33,6 +34,7 @@ const SearchControl = (props) => {
 							className={classes.input}
 							id='search-to-price'
                             name='toPrice'
+							size='small'
 							label='To Price'
 							variant='outlined'
 						/>

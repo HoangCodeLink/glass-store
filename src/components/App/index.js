@@ -4,7 +4,6 @@ import './App.css';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import ProductList from '../ProductList';
 import SearchControl from '../SearchControl';
-import { Grid } from '@material-ui/core';
 
 const theme = responsiveFontSizes(
 	createMuiTheme({
@@ -62,10 +61,8 @@ function App() {
 		<ThemeProvider theme={theme}>
 			<div className='App'>
 				<NavBar />
-				<Grid item>
-					<SearchControl />
-					<ProductList list={products} />
-				</Grid>
+				<SearchControl />
+				<ProductList list={products} />
 			</div>
 		</ThemeProvider>
 	);
