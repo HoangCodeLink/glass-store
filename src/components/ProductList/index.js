@@ -7,8 +7,8 @@ const ProductList = (props) => {
 
 	return (
 		<Grid className={classes.root} container justify='space-evenly' spacing={5}>
-			{products.map((value, i) => (
-				<Grid key={i} item>
+			{products.map((value) => (
+				<Grid key={value.id} item>
 					<Product product={value} />
 				</Grid>
 			))}

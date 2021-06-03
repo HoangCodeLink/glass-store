@@ -15,11 +15,20 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import React, { useState } from 'react';
 import { Add, Cancel } from '@material-ui/icons';
 import AddProduct from '../AddProduct';
+import Cart from '../Cart';
 
 const NavBar = (props) => {
 	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
+	const [mode, setMode] = useState('');
+	const [dialogProps, setDialogProps] = useState({ maxWidth: 'md' });
+
+	const openDialog = (value) => {
+		setMode(value);
+		setDialogProps({ maxWidth: value === 'cart' ? 'sm' : 'md' });
+		setOpen(true);
+	};
 
 	return (
 		<AppBar position='static'>
@@ -43,19 +52,19 @@ const NavBar = (props) => {
 					aria-controls='NewProduct'
 					title='New Product'
 					size='medium'
-					onClick={() => setOpen(true)}
+					onClick={() => openDialog('product')}
 					startIcon={<Add />}>
 					<span className={classes.buttonText}>New Product</span>
 				</Button>
 				<Dialog
 					fullWidth
-					maxWidth='md'
+					{...dialogProps}
 					open={open}
-					onClose={() => setOpen(false)}
 					aria-labelledby='form-dialog-title'
 					disableBackdropClick
 					disableEscapeKeyDown>
 					<DialogTitle>
+						<h2 className={classes.dtitle}>{mode === 'cart' ? 'Shopping Cart' : 'New Product'}</h2>
 						<Button
 							variant='outlined'
 							size='large'
@@ -66,11 +75,14 @@ const NavBar = (props) => {
 						</Button>
 					</DialogTitle>
 					<DialogContent>
-						<AddProduct />
+						{mode === 'product' ? <AddProduct /> : <Cart />}
 					</DialogContent>
 				</Dialog>
-				<IconButton aria-label='show 4 new mails' color='inherit'>
-					<Badge badgeContent={4} color='secondary'>
+				<IconButton
+					aria-label='show shopping cart'
+					color='inherit'
+					onClick={() => openDialog('cart')}>
+					<Badge badgeContent={4} color='error'>
 						<ShoppingCartIcon />
 					</Badge>
 				</IconButton>
@@ -96,13 +108,17 @@ const useStyles = makeStyles((theme) => ({
 		width: 70,
 		height: 70,
 	},
+	dtitle: {
+		float: 'left',
+		margin: 0
+	},
 	button: {
 		float: 'right',
 		'&:hover': {
-			backgroundColor: 'red',
-			color: 'white'
+			backgroundColor: '#d11a2a',
+			color: 'white',
 		},
-	}
+	},
 }));
 
 export default NavBar;

@@ -11,7 +11,18 @@ import {
 
 const Product = (props) => {
 	const classes = useStyles();
-	const { name, price, img } = props.product;
+	const { id, name, price, img } = props.product;
+
+	const addToCart = (e) => {
+		e.preventDefault();
+		const cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
+		if (!!cart[id]) {
+			cart[id].quantity++;
+		} else {
+			cart[id] = { ...props.product, quantity: 1 }
+		}
+		localStorage.setItem('cart', JSON.stringify(cart));
+	}
 
 	return (
 		<div className={classes.root}>
@@ -41,6 +52,7 @@ const Product = (props) => {
 									aria-label='Add To Cart'
 									aria-controls='AddToCart'
 									title='Add To Cart'
+									onClick={addToCart}
 									size='medium'
 									startIcon={<AddShoppingCartSharp />}>
 									<span className={classes.buttonText}>Add To Cart</span>

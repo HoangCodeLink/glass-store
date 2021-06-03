@@ -55,7 +55,7 @@ const AddProduct = (props) => {
 	return (
 		<form className={classes.root} onSubmit={handleSubmit(onSubmit)} noValidate>
 			<Grid container spacing={3}>
-				<Grid item direction='column'>
+				<Grid item>
 					<div>
 						<img
 							className={classes.photo}
