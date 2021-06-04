@@ -1,13 +1,39 @@
 import Product from '../Product';
 import { Grid, makeStyles } from '@material-ui/core';
+import { AppContext } from './../App/index';
+import { useContext, useEffect } from 'react';
 
 const ProductList = (props) => {
-	const classes = useStyles();
-	const products = props.list;
+	const classes = useStyles();	
+	const { state, dispatch } = useContext(AppContext);
+
+	const getProducts = async () => {
+		fetch(
+			`${process.env.REACT_APP_API_URL}/products`,
+			{
+				method: 'GET',
+				headers: {
+					Accept: 'application/json',
+				},
+			}
+		).then(async (res) => {
+			let data = await res.json();
+			if (res.status === 200) {
+				dispatch({ type: 'FETCH_PRODUCT_LIST_END', products: data });
+				return;
+			}
+			console.log(JSON.stringify(data));
+		})
+	}
+	
+	useEffect(() => {
+		dispatch({ type: 'FETCH_PRODUCT_LIST_START' });
+		getProducts();
+	}, [])
 
 	return (
 		<Grid className={classes.root} container spacing={5}>
-			{products.map((value) => (
+			{!!state.products && state.products.map((value) => (
 				<Grid key={value.id} item>
 					<Product product={value} />
 				</Grid>
