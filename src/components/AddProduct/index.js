@@ -11,6 +11,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MonetizationOn, Save } from '@material-ui/icons';
 import { useState } from 'react';
+import NumberField from '../NumberField';
 
 const AddProduct = (props) => {
 	const classes = useStyles();
@@ -20,14 +21,14 @@ const AddProduct = (props) => {
 		shortDesc: yup.string().required('Please enter description'),
 		price: yup
 			.number()
-			.required('Please enter price')
-			.typeError('Please enter a valid number')
+			.typeError('Please enter price')
 			.moreThan(0, 'Price must be greater than 0'),
 	});
 
 	const {
 		register,
 		handleSubmit,
+		control,
 		formState: { errors },
 	} = useForm({
 		mode: 'onChange',
@@ -86,12 +87,11 @@ const AddProduct = (props) => {
 						error={!!errors.name}
 						helperText={errors.name?.message}
 					/>
-					<TextField
+					<NumberField
+					control={control}
 						margin='normal'
-						id='price'
 						name='price'
 						label='Price'
-						type='number'
 						InputProps={{
 							startAdornment: (
 								<InputAdornment position='start'>
@@ -101,9 +101,6 @@ const AddProduct = (props) => {
 						}}
 						variant='outlined'
 						fullWidth
-						{...register('price')}
-						error={!!errors.price}
-						helperText={errors.price?.message}
 					/>
 					<TextField
 						margin='normal'
