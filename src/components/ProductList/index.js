@@ -6,7 +6,7 @@ const ProductList = (props) => {
 	const products = props.list;
 
 	return (
-		<Grid className={classes.root} container justify='space-evenly' spacing={5}>
+		<Grid className={classes.root} container spacing={5}>
 			{products.map((value) => (
 				<Grid key={value.id} item>
 					<Product product={value} />
@@ -18,7 +18,22 @@ const ProductList = (props) => {
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		marginTop: 20,
+		padding: '3% 7%',
+		'&::after': {
+			content: '""',
+			maxHeight: '0px',
+			width: '324px',
+		},
+		justifyContent: 'space-between',
+		'@media screen and (min-width: 1002px) and (max-width: 1092px)': {
+			padding: '3% 3%',
+		},
+		'@media screen and (max-width: 719px)': {
+			padding: '3% 3%',
+		},
+		'@media screen and (max-width: 670px)': {
+			justifyContent: 'center',
+		},
 	},
 	grow: {
 		flexGrow: 1,
