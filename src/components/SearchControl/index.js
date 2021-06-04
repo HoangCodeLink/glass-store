@@ -12,9 +12,12 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import NumberField from '../NumberField';
+import { useContext } from 'react';
+import { AppContext } from './../App/index';
 
 const SearchControl = (props) => {
 	const classes = useStyles();
+	const { dispatch } = useContext(AppContext);
 
 	const schema = yup.object().shape({
 		name: yup.string(),
@@ -43,7 +46,7 @@ const SearchControl = (props) => {
 	});
 
 	const onSubmit = (data) => {
-		alert(JSON.stringify(data));
+		dispatch({ type: 'FETCH_PRODUCT_LIST_START', productFilter: data });
 	};
 
 	return (

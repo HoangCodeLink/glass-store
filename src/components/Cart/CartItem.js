@@ -7,33 +7,22 @@ import {
 	Button,
 } from '@material-ui/core';
 import { Add, DeleteSweep, Remove } from '@material-ui/icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AppContext } from '../App';
 
 const CartItem = (props) => {
 	const classes = useStyles();
-	const [item, setItem] = useState(props.item);
+	const { dispatch } = useContext(AppContext);
+	const [item] = useState(props.item);
 
 	const addToCart = (e) => {
 		e.preventDefault();
-		const cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
-		cart[item.id].quantity++;
-
-		localStorage.setItem('cart', JSON.stringify(cart));
-		setItem(cart[item.id]);
+		dispatch({ type: 'ADD_TO_CART', product: props.item });
 	};
 
 	const removeFromCart = (e, isAll) => {
 		e.preventDefault();
-		const cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
-		cart[item.id].quantity--;
-
-		if (isAll || cart[item.id].quantity === 0) {
-			delete cart[item.id];
-			props.removeItem(item.id);
-		} else {
-			setItem(cart[item.id]);
-		}
-		localStorage.setItem('cart', JSON.stringify(cart));
+		dispatch({ type: 'REMOVE_FROM_CART', product: props.item, isAll });
 	};
 
 	return (
@@ -67,7 +56,7 @@ const CartItem = (props) => {
 								</Button>
 								<button
 									style={{ width: '50px', backgroundColor: 'transparent' }}>
-									{item.quantity ?? 3}
+									{item.quantity}
 								</button>
 								<Button aria-label='Add' onClick={addToCart}>
 									<Add />

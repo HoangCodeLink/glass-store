@@ -1,5 +1,5 @@
 import { AddShoppingCartSharp } from '@material-ui/icons';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
 	Button,
 	ButtonBase,
@@ -8,20 +8,16 @@ import {
 	Paper,
 	Typography,
 } from '@material-ui/core';
+import { AppContext } from '../App';
 
 const Product = (props) => {
 	const classes = useStyles();
-	const { id, name, price, img } = props.product;
+	const { name, price, img } = props.product	
+	const { dispatch } = useContext(AppContext);
 
 	const addToCart = (e) => {
 		e.preventDefault();
-		const cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
-		if (!!cart[id]) {
-			cart[id].quantity++;
-		} else {
-			cart[id] = { ...props.product, quantity: 1 }
-		}
-		localStorage.setItem('cart', JSON.stringify(cart));
+		dispatch({ type: 'ADD_TO_CART', product: props.product });
 	}
 
 	return (

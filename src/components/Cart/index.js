@@ -1,17 +1,16 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../App';
 import CartItem from './CartItem';
 
 const Cart = (props) => {
-	const classes = useStyles();
-	const [products, setProducts] = useState(
-		Object.values(JSON.parse(localStorage.getItem('cart') ?? '{}'))
-	);
+	const classes = useStyles();	
+	const { state } = useContext(AppContext);
+	const [products, setProducts] = useState([]);
 
-	// temperary function
-	const removeItem = (id) => {
-		setProducts(products.filter((x) => x.id !== id));
-	};
+	useEffect(() => {		
+		setProducts(Object.values(state.cart ?? {}))
+	}, [state.cartSize])
 
 	return (
 		<Grid
@@ -23,7 +22,7 @@ const Cart = (props) => {
 			{products.length > 0 ? (
 				products.map((value) => (
 					<Grid key={value.id} item className={classes.item}>
-						<CartItem item={value} removeItem={removeItem} />
+						<CartItem item={value} />
 					</Grid>
 				))
 			) : (

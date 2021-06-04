@@ -12,13 +12,15 @@ import {
 } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Add, Cancel } from '@material-ui/icons';
 import AddProduct from '../AddProduct';
 import Cart from '../Cart';
+import { AppContext } from '../App';
 
 const NavBar = (props) => {
 	const classes = useStyles();
+	const { state } = useContext(AppContext);
 
 	const [open, setOpen] = useState(false);
 	const [mode, setMode] = useState('');
@@ -64,7 +66,9 @@ const NavBar = (props) => {
 					disableBackdropClick
 					disableEscapeKeyDown>
 					<DialogTitle>
-						<h2 className={classes.dtitle}>{mode === 'cart' ? 'Shopping Cart' : 'New Product'}</h2>
+						<h2 className={classes.dtitle}>
+							{mode === 'cart' ? 'Shopping Cart' : 'New Product'}
+						</h2>
 						<Button
 							variant='outlined'
 							size='large'
@@ -82,9 +86,13 @@ const NavBar = (props) => {
 					aria-label='show shopping cart'
 					color='inherit'
 					onClick={() => openDialog('cart')}>
-					<Badge badgeContent={4} color='error'>
+					{state.cartSize > 0 ? (
+						<Badge badgeContent={state.cartSize} color='error'>
+							<ShoppingCartIcon />
+						</Badge>
+					) : (
 						<ShoppingCartIcon />
-					</Badge>
+					)}
 				</IconButton>
 			</Toolbar>
 		</AppBar>
@@ -110,7 +118,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	dtitle: {
 		float: 'left',
-		margin: 0
+		margin: 0,
 	},
 	button: {
 		float: 'right',
