@@ -3,7 +3,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { AppContext } from './../App/index';
 import { useContext, useEffect } from 'react';
 import queryString from 'query-string';
-import { SpinningCircles, useLoading } from '@agney/react-loading';
+import { Oval, useLoading } from '@agney/react-loading';
 
 const ProductList = (props) => {
 	const classes = useStyles();
@@ -19,7 +19,7 @@ const ProductList = (props) => {
 				transform: 'translate(-50%, -50%)',
 			},
 		},
-		indicator: <SpinningCircles width='30' />,
+		indicator: <Oval width='30' />,
 	});
 	const loader = <section {...containerProps}>{indicatorEl}</section>;
 

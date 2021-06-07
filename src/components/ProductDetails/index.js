@@ -3,12 +3,27 @@ import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router';
 import { AppContext } from './../App/index';
 import { AddShoppingCartSharp } from '@material-ui/icons';
+import { Oval, useLoading } from '@agney/react-loading';
 
 const ProductDetails = (props) => {
 	const classes = useStyles();
 	const { dispatch } = useContext(AppContext);
-	const [product, setProduct] = useState({});
+	const [product, setProduct] = useState(undefined);
 	const { id } = useParams();
+
+	const { containerProps, indicatorEl } = useLoading({
+		loading: true,
+		loaderProps: {
+			style: {
+				position: 'absolute',
+				top: '50%',
+				left: '50%',
+				transform: 'translate(-50%, -50%)',
+			},
+		},
+		indicator: <Oval width='50' />,
+	});
+	const loader = <section {...containerProps}>{indicatorEl}</section>;
 
 	const getDetails = async (id) => {
 		fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
@@ -35,7 +50,7 @@ const ProductDetails = (props) => {
 		dispatch({ type: 'ADD_TO_CART', product: product });
 	};
 
-	return (
+	return !!product ? (
 		<Grid container>
 			<Grid className={classes.photo} item xs={12} sm={6}>
 				<img src={product.img} alt='' width='80%' />
@@ -68,6 +83,8 @@ const ProductDetails = (props) => {
 				</Grid>
 			</Grid>
 		</Grid>
+	) : (
+		loader
 	);
 };
 
