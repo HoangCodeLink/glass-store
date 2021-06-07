@@ -8,7 +8,7 @@ import {
 	TextField,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import NumberField from '../NumberField';
@@ -38,23 +38,25 @@ const SearchControl = (props) => {
 	});
 
 	const {
-		register,
 		handleSubmit,
 		control,
-		formState: { errors },
+		setValue
 	} = useForm({
 		mode: 'onChange',
 		reValidateMode: 'onChange',
 		resolver: yupResolver(schema),
-		defaultValues: {},
 	});
-	
+
 	useEffect(() => {
 		const filter = queryString.parse(location.search);
+		for (let key in filter) {
+			setValue(key, filter[key]);
+		}
 		dispatch({ type: 'FETCH_PRODUCT_LIST_START', productFilter: filter });
 	}, [location]);
 
 	const onSubmit = (data) => {
+		Object.keys(data).forEach(x => data[x] === '' && delete data[x]);
 		history.push(`/products?${queryString.stringify(data)}`);
 	};
 
@@ -65,16 +67,26 @@ const SearchControl = (props) => {
 					<CardContent className={classes.content}>
 						<Grid container spacing={2}>
 							<Grid item xs={12} sm={3}>
-								<TextField
-									className={classes.input}
-									id='search-name'
+								<Controller
 									name='name'
-									size='small'
-									label='Name'
-									variant='outlined'
-									{...register('name')}
-									error={!!errors.name}
-									helperText={errors.name?.message}
+									control={control}
+									defaultValue=''
+									render={({
+										field: { value, onChange },
+										fieldState: { error },
+									}) => (
+										<TextField
+											className={classes.input}
+											id='search-name'
+											size='small'
+											label='Name'
+											variant='outlined'
+											error={!!error}
+											helperText={error}
+											value={value}
+											onChange={onChange}
+										/>
+									)}
 								/>
 							</Grid>
 							<Grid item xs={12} sm={3}>
