@@ -12,11 +12,15 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import NumberField from '../NumberField';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AppContext } from './../App/index';
+import { useHistory, useLocation } from 'react-router';
+import queryString from 'query-string';
 
 const SearchControl = (props) => {
 	const classes = useStyles();
+	const location = useLocation();
+	const history = useHistory();
 	const { dispatch } = useContext(AppContext);
 
 	const schema = yup.object().shape({
@@ -44,9 +48,14 @@ const SearchControl = (props) => {
 		resolver: yupResolver(schema),
 		defaultValues: {},
 	});
+	
+	useEffect(() => {
+		const filter = queryString.parse(location.search);
+		dispatch({ type: 'FETCH_PRODUCT_LIST_START', productFilter: filter });
+	}, [location]);
 
 	const onSubmit = (data) => {
-		dispatch({ type: 'FETCH_PRODUCT_LIST_START', productFilter: data });
+		history.push(`/products?${queryString.stringify(data)}`);
 	};
 
 	return (

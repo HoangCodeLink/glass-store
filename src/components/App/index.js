@@ -6,6 +6,8 @@ import ProductList from '../ProductList';
 import SearchControl from '../SearchControl';
 import { createContext, useReducer } from 'react';
 import reducer from '../../reducer';
+import ProductDetails from '../ProductDetails';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 const theme = responsiveFontSizes(
 	createMuiTheme({
@@ -28,11 +30,24 @@ function App() {
 	return (
 		<AppContext.Provider value={{ state, dispatch }}>
 			<ThemeProvider theme={theme}>
-				<div className='App'>
-					<NavBar />
-					<SearchControl />
-					<ProductList />
-				</div>
+				<BrowserRouter>
+					<div className='App'>
+						<NavBar />
+						<Switch>
+							<Route path='/products/:id'>
+								<ProductDetails />
+							</Route>
+							<Route key='products' path='/products'>
+								<SearchControl />
+								<ProductList />
+							</Route>
+							<Route exact path='/'>
+								<SearchControl />
+								<ProductList />
+							</Route>
+						</Switch>
+					</div>
+				</BrowserRouter>
 			</ThemeProvider>
 		</AppContext.Provider>
 	);

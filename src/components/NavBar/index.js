@@ -17,6 +17,7 @@ import { Add, Cancel } from '@material-ui/icons';
 import AddProduct from '../AddProduct';
 import Cart from '../Cart';
 import { AppContext } from '../App';
+import { Link } from 'react-router-dom';
 
 const NavBar = (props) => {
 	const classes = useStyles();
@@ -40,11 +41,15 @@ const NavBar = (props) => {
 					className={classes.menuButton}
 					color='inherit'
 					aria-label='logo'>
-					<img className={classes.img} alt='complex' src='/logo.png' />
+					<Link to='/'>
+						<img className={classes.img} alt='complex' src='/logo.png' />
+					</Link>
 				</IconButton>
-				<Typography className={classes.title} variant='h6' noWrap>
-					Eyeglass Store
-				</Typography>
+				<Link className={classes.title} to='/'>
+					<Typography variant='h6' noWrap>
+						Eyeglass Store
+					</Typography>
+				</Link>
 				<div className={classes.grow} />
 				<Button
 					edge='start'
@@ -108,6 +113,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		display: 'none',
+		textDecoration: 'none',
+		color: 'white',
 		[theme.breakpoints.up('sm')]: {
 			display: 'block',
 		},

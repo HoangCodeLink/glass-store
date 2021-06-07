@@ -10,11 +10,13 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MonetizationOn, Save } from '@material-ui/icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import NumberField from '../NumberField';
+import { AppContext } from '../App';
 
 const AddProduct = (props) => {
 	const classes = useStyles();
+	const { state, dispatch } = useContext(AppContext);
 
 	const schema = yup.object().shape({
 		name: yup.string().required('Please enter product name'),
@@ -29,6 +31,7 @@ const AddProduct = (props) => {
 		register,
 		handleSubmit,
 		control,
+		reset,
 		formState: { errors },
 	} = useForm({
 		mode: 'onChange',
@@ -41,16 +44,43 @@ const AddProduct = (props) => {
 
 	const onSubmit = (data) => {
 		setIsSubmitting(true);
+		fetch(`${process.env.REACT_APP_API_URL}/products`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json;charset=UTF-8',
+			},
+			body: JSON.stringify({ ...data, img: photo }),
+		})
+			.then(async (res) => {
+				// var product = await res.json();
+				setIsSubmitting(false);
+				dispatch({ type: 'FETCH_PRODUCT_LIST_START', productFilter: state.productFilter });
+				reset();
+				setPhoto(undefined);
+				alert('Add product successfully!');
+			})
+			.catch((error) => {
+				alert(error);
+				setIsSubmitting(false);
+			});
 	};
 
 	const [photo, setPhoto] = useState();
 
 	const loadPhoto = (e) => {
-		let fr = new FileReader();
-		fr.onload = () => {
-			setPhoto(fr.result);
-		};
-		fr.readAsDataURL(e.target.files[0]);
+		var formData = new FormData();
+		formData.append('file', e.target.files[0]);
+		fetch(`${process.env.REACT_APP_API_URL}/products/photo`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+			},
+			body: formData,
+		}).then(async (res) => {
+			var data = await res.json();
+			setPhoto(data.url);
+		});
 	};
 
 	return (
@@ -88,7 +118,7 @@ const AddProduct = (props) => {
 						helperText={errors.name?.message}
 					/>
 					<NumberField
-					control={control}
+						control={control}
 						margin='normal'
 						name='price'
 						label='Price'
@@ -121,7 +151,7 @@ const AddProduct = (props) => {
 				variant='contained'
 				color='primary'
 				size='large'
-                type='submit'
+				type='submit'
 				className={classes.button}
 				startIcon={
 					isSubmitting ? (
@@ -153,7 +183,7 @@ const useStyles = makeStyles((theme) => ({
 		margin: theme.spacing(2),
 		width: '30%',
 		'&:hover': {
-			backgroundColor: 'green',
+			backgroundColor: '#4DAF7C',
 			color: 'white',
 		},
 	},

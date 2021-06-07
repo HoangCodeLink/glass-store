@@ -9,51 +9,57 @@ import {
 	Typography,
 } from '@material-ui/core';
 import { AppContext } from '../App';
+import { Link } from 'react-router-dom';
 
 const Product = (props) => {
 	const classes = useStyles();
-	const { name, price, img } = props.product	
+	const { id, name, price, img } = props.product;
 	const { dispatch } = useContext(AppContext);
 
 	const addToCart = (e) => {
 		e.preventDefault();
 		dispatch({ type: 'ADD_TO_CART', product: props.product });
-	}
+	};
 
 	return (
 		<div className={classes.root}>
 			<Paper className={classes.paper}>
 				<Grid container justify='center' direction='column' spacing={2}>
 					<Grid item>
-						<ButtonBase className={classes.image}>
-							<img
-								className={classes.img}
-								alt='complex'
-								src={img || '/default_thumbnail.png'}
-							/>
-						</ButtonBase>
+						<Link to={`/products/${id}`}>
+							<ButtonBase className={classes.image}>
+								<img
+									className={classes.img}
+									alt='complex'
+									src={img || '/default_thumbnail.png'}
+								/>
+							</ButtonBase>
+						</Link>
 					</Grid>
 					<Grid item xs={12} sm container direction='column'>
-							<Grid item xs>
+						<Grid item xs>
+							<Link className={classes.name} to={`/products/${id}`}>
 								<Typography gutterBottom variant='subtitle1'>
 									{name}
 								</Typography>
-							</Grid>
-							<Grid item>
-								<Typography variant='subtitle1'>${price}</Typography>
-								<Button
-									edge='start'
-									color='inherit'
-									variant='outlined'
-									aria-label='Add To Cart'
-									aria-controls='AddToCart'
-									title='Add To Cart'
-									onClick={addToCart}
-									size='medium'
-									startIcon={<AddShoppingCartSharp />}>
-									<span className={classes.buttonText}>Add To Cart</span>
-								</Button>
-							</Grid>
+							</Link>
+						</Grid>
+						<Grid item>
+							<Typography variant='subtitle1'>${price}</Typography>
+							<Button
+								edge='start'
+								color='inherit'
+								variant='outlined'
+								aria-label='Add To Cart'
+								aria-controls='AddToCart'
+								title='Add To Cart'
+								className={classes.button}
+								onClick={addToCart}
+								size='medium'
+								startIcon={<AddShoppingCartSharp />}>
+								Add To Cart
+							</Button>
+						</Grid>
 					</Grid>
 				</Grid>
 			</Paper>
@@ -70,6 +76,10 @@ const useStyles = makeStyles((theme) => ({
 		margin: 'auto',
 		maxWidth: 500,
 	},
+	name: {
+		color: theme.palette.primary.main,
+		textDecoration: 'none',
+	},
 	image: {
 		width: 250,
 		height: 200,
@@ -80,6 +90,12 @@ const useStyles = makeStyles((theme) => ({
 		maxWidth: '100%',
 		maxHeight: '100%',
 	},
+	button: {
+		'&:hover': {
+			color: 'white',
+			backgroundColor: '#22A7F0'
+		}
+	}
 }));
 
 export default Product;
