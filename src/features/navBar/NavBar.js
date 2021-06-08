@@ -12,16 +12,18 @@ import {
 } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Add, Cancel } from '@material-ui/icons';
-import AddProduct from '../AddProduct';
-import Cart from '../Cart';
-import { AppContext } from '../App';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Cart } from '../cart/Cart';
+import { AddProduct } from '../addProduct/AddProduct';
+import { getCart } from '../cart/cartSlice';
 
-const NavBar = (props) => {
+export const NavBar = (props) => {
 	const classes = useStyles();
-	const { state } = useContext(AppContext);
+	const dispatch = useDispatch();
+	const cartSize = useSelector((state) => state.cart.cartSize);
 
 	const [open, setOpen] = useState(false);
 	const [mode, setMode] = useState('');
@@ -32,6 +34,10 @@ const NavBar = (props) => {
 		setDialogProps({ maxWidth: value === 'cart' ? 'sm' : 'md' });
 		setOpen(true);
 	};
+
+	useEffect(() => {
+		dispatch(getCart())
+	}, [])
 
 	return (
 		<AppBar position='static'>
@@ -91,8 +97,8 @@ const NavBar = (props) => {
 					aria-label='show shopping cart'
 					color='inherit'
 					onClick={() => openDialog('cart')}>
-					{state.cartSize > 0 ? (
-						<Badge badgeContent={state.cartSize} color='error'>
+					{cartSize > 0 ? (
+						<Badge badgeContent={cartSize} color='error'>
 							<ShoppingCartIcon />
 						</Badge>
 					) : (
@@ -135,5 +141,3 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 }));
-
-export default NavBar;

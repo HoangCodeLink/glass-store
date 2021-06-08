@@ -1,16 +1,16 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../App';
-import CartItem from './CartItem';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { CartItem } from './CartItem';
 
-const Cart = (props) => {
-	const classes = useStyles();	
-	const { state } = useContext(AppContext);
+export const Cart = (props) => {
+	const classes = useStyles();
+	const cart = useSelector(state => state.cart.cart);
 	const [products, setProducts] = useState([]);
 
 	useEffect(() => {		
-		setProducts(Object.values(state.cart ?? {}))
-	}, [state.cartSize])
+		setProducts(Object.values(cart ?? {}))
+	}, [cart])
 
 	return (
 		<Grid
@@ -22,7 +22,7 @@ const Cart = (props) => {
 			{products.length > 0 ? (
 				products.map((value) => (
 					<Grid key={value.id} item className={classes.item}>
-						<CartItem item={value} />
+						<CartItem id={value.id} />
 					</Grid>
 				))
 			) : (
@@ -40,5 +40,3 @@ const useStyles = makeStyles((theme) => ({
 		width: '100%',
 	},
 }));
-
-export default Cart;

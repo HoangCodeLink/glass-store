@@ -1,5 +1,5 @@
 import { AddShoppingCartSharp } from '@material-ui/icons';
-import React, { useContext } from 'react';
+import React from 'react';
 import {
 	Button,
 	ButtonBase,
@@ -8,17 +8,18 @@ import {
 	Paper,
 	Typography,
 } from '@material-ui/core';
-import { AppContext } from '../App';
 import { Link } from 'react-router-dom';
+import { addToCart } from "../cart/cartSlice";
+import { useDispatch } from 'react-redux';
 
-const Product = (props) => {
+export const Product = (props) => {
 	const classes = useStyles();
+	const dispatch = useDispatch();
 	const { id, name, price, img } = props.product;
-	const { dispatch } = useContext(AppContext);
 
-	const addToCart = (e) => {
+	const increaseAmount = (e) => {
 		e.preventDefault();
-		dispatch({ type: 'ADD_TO_CART', product: props.product });
+		dispatch(addToCart(props.product));
 	};
 
 	return (
@@ -54,7 +55,7 @@ const Product = (props) => {
 								aria-controls='AddToCart'
 								title='Add To Cart'
 								className={classes.button}
-								onClick={addToCart}
+								onClick={increaseAmount}
 								size='medium'
 								startIcon={<AddShoppingCartSharp />}>
 								Add To Cart
@@ -97,5 +98,3 @@ const useStyles = makeStyles((theme) => ({
 		}
 	}
 }));
-
-export default Product;

@@ -7,22 +7,22 @@ import {
 	Button,
 } from '@material-ui/core';
 import { Add, DeleteSweep, Remove } from '@material-ui/icons';
-import { useContext, useState } from 'react';
-import { AppContext } from '../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from "./cartSlice";
 
-const CartItem = (props) => {
+export const CartItem = (props) => {
 	const classes = useStyles();
-	const { dispatch } = useContext(AppContext);
-	const [item] = useState(props.item);
+	const dispatch = useDispatch();
+	const product = useSelector(state => state.cart.cart[props.id]);
 
-	const addToCart = (e) => {
+	const increaseAmount = (e) => {
 		e.preventDefault();
-		dispatch({ type: 'ADD_TO_CART', product: props.item });
+		dispatch(addToCart(product));
 	};
 
-	const removeFromCart = (e, isAll) => {
+	const decreaseAmount = (e, isAll) => {
 		e.preventDefault();
-		dispatch({ type: 'REMOVE_FROM_CART', product: props.item, isAll });
+		dispatch(removeFromCart({ product, isAll }));
 	};
 
 	return (
@@ -34,7 +34,7 @@ const CartItem = (props) => {
 							<img
 								className={classes.img}
 								alt='complex'
-								src={item.img ?? '/default_thumbnail.png'}
+								src={product?.img ?? '/default_thumbnail.png'}
 							/>
 						</ButtonBase>
 					</Grid>
@@ -42,23 +42,23 @@ const CartItem = (props) => {
 						<Grid item xs container direction='column' spacing={2}>
 							<Grid item xs style={{ marginLeft: 10 }}>
 								<Typography gutterBottom variant='subtitle1'>
-									{item.name}
+									{product?.name}
 								</Typography>
 								<Typography variant='body2' gutterBottom>
-									${item.price}
+									${product?.price}
 								</Typography>
 							</Grid>
 							<Grid container item alignItems='center' justify='center'>
 								<Button
 									aria-label='Remove'
-									onClick={(e) => removeFromCart(e, false)}>
+									onClick={(e) => decreaseAmount(e, false)}>
 									<Remove />
 								</Button>
 								<button
 									style={{ width: '50px', backgroundColor: 'transparent' }}>
-									{item.quantity}
+									{product?.quantity}
 								</button>
-								<Button aria-label='Add' onClick={addToCart}>
+								<Button aria-label='Add' onClick={increaseAmount}>
 									<Add />
 								</Button>
 							</Grid>
@@ -68,7 +68,7 @@ const CartItem = (props) => {
 						<Button
 							className={classes.delete}
 							aria-label='Delete'
-							onClick={(e) => removeFromCart(e, true)}>
+							onClick={(e) => decreaseAmount(e, true)}>
 							<DeleteSweep />
 						</Button>
 					</Grid>
@@ -107,5 +107,3 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 }));
-
-export default CartItem;

@@ -10,13 +10,16 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MonetizationOn, Save } from '@material-ui/icons';
-import { useContext, useState } from 'react';
+import { useEffect, useState } from 'react';
 import NumberField from '../NumberField';
-import { AppContext } from '../App';
+import { addProduct } from './addProductThunk';
+import { useDispatch, useSelector } from 'react-redux';
 
-const AddProduct = (props) => {
+export const AddProduct = (props) => {
 	const classes = useStyles();
-	const { state, dispatch } = useContext(AppContext);
+	const dispatch = useDispatch();
+	const loading = useSelector(state => state.addProduct.loading);
+	const message = useSelector(state => state.addProduct.message);
 
 	const schema = yup.object().shape({
 		name: yup.string().required('Please enter product name'),
@@ -40,30 +43,21 @@ const AddProduct = (props) => {
 		defaultValues: {},
 	});
 
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	useEffect(() => {
+		if (!loading) {
+			reset();
+			setPhoto('');
+		}
+	}, [loading])
+
+	useEffect(() => {
+		if (!!message) {
+			alert(message);
+		}
+	}, [message])
 
 	const onSubmit = (data) => {
-		setIsSubmitting(true);
-		fetch(`${process.env.REACT_APP_API_URL}/products`, {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json;charset=UTF-8',
-			},
-			body: JSON.stringify({ ...data, img: photo }),
-		})
-			.then(async (res) => {
-				// var product = await res.json();
-				setIsSubmitting(false);
-				dispatch({ type: 'FETCH_PRODUCT_LIST_START', productFilter: state.productFilter });
-				reset();
-				setPhoto(undefined);
-				alert('Add product successfully!');
-			})
-			.catch((error) => {
-				alert(error);
-				setIsSubmitting(false);
-			});
+		dispatch(addProduct({ ...data, img: photo }));
 	};
 
 	const [photo, setPhoto] = useState();
@@ -154,13 +148,13 @@ const AddProduct = (props) => {
 				type='submit'
 				className={classes.button}
 				startIcon={
-					isSubmitting ? (
+					loading ? (
 						<CircularProgress size={24} className={classes.buttonProgress} />
 					) : (
 						<Save />
 					)
 				}
-				disabled={isSubmitting}>
+				disabled={loading}>
 				Save
 			</Button>
 		</form>
@@ -188,5 +182,3 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 }));
-
-export default AddProduct;
