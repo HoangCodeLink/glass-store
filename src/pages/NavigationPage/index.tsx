@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, getCart, removeFromCart } from "../../actions";
 import { NavBar } from "../../components/NavBar"
-import { cartItemsSelector, cartSizeSelector } from "../../reducers/cartSlice";
+import { cartItemsSelector, cartSizeSelector } from "../../reducers";
 import { CartItem } from "../../types";
 
 const NavigationPage = () => {

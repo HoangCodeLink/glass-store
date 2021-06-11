@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { addToCart, endLoading, startLoading } from '../../actions';
 import { ProductDetails } from '../../components/ProductDetails';
+import withLoading from '../../hocs/withLoading';
 import { getProduct } from '../../services/productService';
 import { CartItem, Product } from '../../types';
 
@@ -24,7 +25,9 @@ const DetailsPage = () => {
 		dispatch(addToCart(cartItem));
 	};
 
-	return <ProductDetails product={product} addToCart={addToShoppingCart} />;
+	const loadableDetails = withLoading(ProductDetails)({ product, addToCart: addToShoppingCart });
+
+	return loadableDetails;
 };
 
 export default DetailsPage;

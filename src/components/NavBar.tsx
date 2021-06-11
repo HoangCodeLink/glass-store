@@ -1,10 +1,6 @@
 import {
 	AppBar,
 	Badge,
-	Button,
-	Dialog,
-	DialogContent,
-	DialogTitle,
 	IconButton,
 	makeStyles,
 	Toolbar,
@@ -13,10 +9,10 @@ import {
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 import { useState } from 'react';
-import { Cancel } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { Cart } from './Cart';
 import { CartItem } from '../types';
+import withDialog from '../hocs/withDialog';
 
 interface Props {
 	items: CartItem[];
@@ -25,14 +21,22 @@ interface Props {
 	removeFromCart: (id: number, isAll?: boolean) => void;
 }
 
-export const NavBar = ({ items, cartSize, addToCart, removeFromCart }: Props) => {
+export const NavBar = ({
+	items,
+	cartSize,
+	addToCart,
+	removeFromCart,
+}: Props) => {
 	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
 
-	const openDialog = () => {
-		setOpen(true);
-	};
+	const CartDialog = withDialog(Cart)({
+		dialogProps: { title: 'Shopping Cart', open, setOpen, maxWith: 'sm' },
+		items,
+		addToCart,
+		removeFromCart,
+	});
 
 	return (
 		<AppBar position='static'>
@@ -52,31 +56,11 @@ export const NavBar = ({ items, cartSize, addToCart, removeFromCart }: Props) =>
 					</Typography>
 				</Link>
 				<div className={classes.grow} />
-				<Dialog
-					fullWidth
-					open={open}
-					aria-labelledby='form-dialog-title'
-					disableBackdropClick
-					disableEscapeKeyDown>
-					<DialogTitle>
-						<h2 className={classes.dtitle}>Shopping Cart</h2>
-						<Button
-							variant='outlined'
-							size='large'
-							onClick={() => setOpen(false)}
-							className={classes.button}
-							startIcon={<Cancel />}>
-							Cancel
-						</Button>
-					</DialogTitle>
-					<DialogContent>
-						<Cart items={items} addToCart={addToCart} removeFromCart={removeFromCart} />
-					</DialogContent>
-				</Dialog>
+				{CartDialog}
 				<IconButton
 					aria-label='show shopping cart'
 					color='inherit'
-					onClick={openDialog}>
+					onClick={() => setOpen(true)}>
 					{cartSize > 0 ? (
 						<Badge badgeContent={cartSize} color='error'>
 							<ShoppingCartIcon />
@@ -108,16 +92,5 @@ const useStyles = makeStyles((theme) => ({
 	img: {
 		width: 70,
 		height: 70,
-	},
-	dtitle: {
-		float: 'left',
-		margin: 0,
-	},
-	button: {
-		float: 'right',
-		'&:hover': {
-			backgroundColor: '#d11a2a',
-			color: 'white',
-		},
 	},
 }));

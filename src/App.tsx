@@ -4,6 +4,7 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import NavigationPage from './pages/NavigationPage';
 import routes from './routes';
+import { LoaderProvider, Oval } from '@agney/react-loading';
 
 const theme = responsiveFontSizes(
 	createMuiTheme({
@@ -23,12 +24,16 @@ function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<BrowserRouter>
-				<div className='App'>
-					<NavigationPage />
-					<Switch>
-						{routes.map(route => <Route {...route} />)}
-					</Switch>
-				</div>
+				<LoaderProvider indicator={<Oval />}>
+					<div className='App'>
+						<NavigationPage />
+						<Switch>
+							{routes.map((route) => (
+								<Route {...route} />
+							))}
+						</Switch>
+					</div>
+				</LoaderProvider>
 			</BrowserRouter>
 		</ThemeProvider>
 	);

@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { getProducts } from '../../services/productService';
 import { addToCart, endLoading, startLoading } from '../../actions';
 import { ProductList } from '../../components/ProductList';
+import withLoading from '../../hocs/withLoading';
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -32,14 +33,15 @@ const HomePage = () => {
 
     const addToShoppingCart = (product: Product) => {
         const cartItem = { ...product, quantity: 0 } as CartItem;
-        cartItem.quantity = 0;
         dispatch(addToCart(cartItem));
     }
+
+    const LoadableProducts = withLoading(ProductList)({ products, addToCart: addToShoppingCart });
 
 	return (
 		<>
 			<SearchControl filter={filter} search={search} />
-            <ProductList products={products} addToCart={addToShoppingCart} />
+            {LoadableProducts}
 		</>
 	);
 };

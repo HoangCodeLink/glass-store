@@ -1,5 +1,6 @@
+import { Cart } from "./Cart";
 
 export interface CartState {
-    cart: any;
+    cart: Cart;
     cartSize: number
 }

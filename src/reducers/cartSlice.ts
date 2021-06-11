@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getCart, addToCart, removeFromCart } from '../actions';
 import { getCart as fetchCart, setCart } from '../services/cartService';
-import { CartItem, CartState } from '../types';
+import { CartState } from '../types';
 
 const initialState: CartState = {
 	cart: {},
@@ -42,9 +42,5 @@ const cartSlice = createSlice({
 		});
 	},
 });
-
-export const cartItemsSelector = (state: any) => Object.values(state.cart.cart) as CartItem[];
-
-export const cartSizeSelector = (state: any) => state.cart.cartSize;
 
 export default cartSlice.reducer;
