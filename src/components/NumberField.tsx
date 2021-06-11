@@ -1,6 +1,7 @@
 import { TextField } from '@material-ui/core';
+import { ChangeEvent } from 'react';
 import { Control, Controller } from 'react-hook-form';
-
+import { isValid } from '../utils/stringHelper';
 interface Props {
 	name: string,
 	control: Control<any>,
@@ -16,10 +17,12 @@ const NumberField = ({
 	pattern = /^((0|([1-9][0-9]*))(\.[0-9]*)?)?$/,
 	...rest
 }: Props) => {
-	const isValid = (value: string) => {
-		const result = value.match(pattern);
-        return result;
-	};
+	const handleChange = (e: ChangeEvent<any>, onChange: (...events: any[]) => void) => {
+		e.preventDefault();
+		if (isValid(e.target.value, pattern)) {
+			onChange(e);
+		}
+	}
 
 	return (
 		<Controller
@@ -30,12 +33,7 @@ const NumberField = ({
 				<TextField
 					{...rest}
 					value={value}
-					onChange={(e) => {
-						e.preventDefault();
-						if (isValid(e.target.value)) {
-							onChange(e);
-						}
-					}}
+					onChange={(e) => handleChange(e, onChange)}
 					error={!!error}
 					helperText={error?.message}
 				/>
